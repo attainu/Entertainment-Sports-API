@@ -147,17 +147,17 @@ Project done by Abhijeet and Souvik
 
         > POST https://entertainment-sports.herokuapp.com/changePassword
 
-        * Forgot Password 
+    * Forgot Password 
 
-            > POST https://entertainment-sports.herokuapp.com/forgotPassword
+        > POST https://entertainment-sports.herokuapp.com/forgotPassword
 
-        * Logout from account
+    * Logout from account
 
-            > DELETE https://entertainment-sports.herokuapp.com/logout
+        > DELETE https://entertainment-sports.herokuapp.com/logout
 
-        * Delete Events details
+    * Delete Events details
 
-            > DELETE https://entertainment-sports.herokuapp.com/logout/revomeEvent/:eventId
+        > DELETE https://entertainment-sports.herokuapp.com/logout/revomeEvent/:eventId
 
 4. Sports organiser routes
 
@@ -193,13 +193,13 @@ Project done by Abhijeet and Souvik
 
         > POST https://entertainment-sports.herokuapp.com/forgotPassword
 
-        * Logout from account
+    * Logout from account
 
-            > DELETE https://entertainment-sports.herokuapp.com/logout
+        > DELETE https://entertainment-sports.herokuapp.com/logout
 
-        * Delete Events details
+     * Delete Events details
 
-            > DELETE https://entertainment-sports.herokuapp.com/logout/revomeSports/:sportId
+        > DELETE https://entertainment-sports.herokuapp.com/logout/revomeSports/:sportId
 
 5. TV-Series Routes
 
