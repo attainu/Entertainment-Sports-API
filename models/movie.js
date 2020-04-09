@@ -46,7 +46,6 @@ const movieSchema = new Schema({
     },
     Runtime: {
         type: String,
-        required:[true,"Please provide the running time"]
     },
     imdRating: {
         type: Number,
@@ -63,7 +62,8 @@ const movieSchema = new Schema({
         type: String
     },
     catagory: {
-        type: String
+        type: String,
+        required: [true, "Please provide movie category Bollywood/Hollywood/Tollywood"]
     },
     releaseDate: {
         type: Date,

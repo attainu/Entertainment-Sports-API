@@ -23,7 +23,7 @@ module.exports = {
                  await newUser.generateToken();
                 // console.log("new user token",newUser.token);
                 const user = await newUser.save();
-                let html= `<a href="http://localhost:1234/verify?token=${user.token}">Verify</a>`;
+                let html= `<a href="${process.env.USER_VERIFY_LINK}verify?token=${user.token}">Verify</a>`;
                 await cmail.mailConfig(html,newUser);
                 return res.status(200).send({msg:"User registered sucessfully. Check your Email",Warning:"Didnot get email?Update your email",token:user.token});
             }
@@ -44,11 +44,11 @@ module.exports = {
     async changeEmail(req,res){
         try{
                const updateEmail = await userModel.updateOne({token: req.headers.authorization},{...req.body}, {new: true});
-               console.log(updateEmail);
+              //  console.log(updateEmail);
                if(updateEmail.nModified !== 0){
                 const updatedUser = await userModel.find({companyEmail: req.body.companyEmail});
               //  console.log(updatedUser)
-              let html= `<a href="http://localhost:1234/verify?token=${req.headers.authorization}">Verify</a>`;
+              let html= `<a href="${process.env.USER_VERIFY_LINK}verify?token=${req.headers.authorization}">Verify</a>`;
               await cmail.mailConfig(html,updatedUser[0]);
               return res.status(200).send({msg:"Check your Email for varyfication"});
                }
@@ -80,7 +80,7 @@ module.exports = {
                     user[0].generateToken();
                     user[0].createLoggedIn();
                     await user[0].save();
-                    return res.status(200).send({msg:`Welcome ${user[0].companyName}`,token:user[0].token});          
+                    return res.status(200).send({msg:`Welcome ${user[0].companyName}`,token:user[0].token, profile: user[0]});          
                 }
                 else if(user[0].isAuthorized === true && user[0].isLoggedIn === true){
                   return res.status(403).send({msg:"You are already logged in"});
@@ -104,7 +104,7 @@ module.exports = {
                       user[0].generateToken();
                       user[0].createLoggedIn();
                       await user[0].save();
-                      return res.status(200).send({msg:`Welcome ${user[0].companyName}`,token:user[0].token});          
+                      return res.status(200).send({msg:`Welcome ${user[0].companyName}`,token:user[0].token, profile: user[0]});          
                   }
                   else if(user[0].isAuthorized === false)
                   {
@@ -157,6 +157,7 @@ module.exports = {
                       // console.log(user);
                       // const newHashPassword = await hash(newPassword,10)
                       user[0].password = newPassword;
+                      user[0].isLoggedIn = false;
                       user[0].token = null;
                       user[0].save()
                       return res.status(201).send({msg:"Password Changed Sucessfully"});
@@ -186,7 +187,7 @@ module.exports = {
         if(user.length !== 0){
           user[0].generateToken();
           await user[0].save();
-          let html= `<a href="http://localhost:1234/forgotPassword/${newPassword}?token=${user[0].token}">Click Here to change the password</a>`;
+          let html= `<a href="${process.env.USER_VERIFY_LINK}forgotPassword/${newPassword}?token=${user[0].token}">Click Here to change the password</a>`;
           const email = await cmail.mailConfig(html,user[0]);
           return res.status(200).send({msg:"Change Password link has been send . Please Check your Email to change password",token:user.token});        }
         else{

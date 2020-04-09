@@ -9,6 +9,7 @@ const {verify,sign}= require("jsonwebtoken");
 const showModel = require("../models/showTime");
 const tvModel = require("../models/TvSeries");
 const eventModel = require("../models/Event");
+const sportModel = require("../models/Sports");
 
 
 
@@ -212,14 +213,12 @@ module.exports = {
         // console.log("Hello Iam going to resend Email");
         user[0].generateToken();
         const updatedUser = await user[0].save();
-        let html= `<a href="http://localhost:1234/verify?token=${updatedUser.token}">Verify</a>`;
+        let html= `${process.env.USER_VERIFY_LINK}verify?token=${updatedUser.token}">Verify</a>`;
         await mailConfig(html,user[0]);
         return  res.send("Your token was expired so we send another conformation email so please check your inbox");
   },
 
   async resetPassword(req,res){
-
-
     try{
         const{token}=req.query;
         const {newPassword}= req.params;
@@ -228,6 +227,7 @@ module.exports = {
         
         // console.log(user);
         user[0].password = newPassword;
+        user[0].isLoggedIn = false;
         user[0].save();
         return res.send({msg:"Your Password has been sucessfully chnaged."});
     }
@@ -334,6 +334,51 @@ module.exports = {
     }
     catch(err){
       res.status(400).send({ErrorMessage:err.message});
+    }
+  },
+
+  async searchCityEvents(req, res){
+    try{
+      const city = req.query.city;
+      const state = req.query.state;
+      const cityId = await cityModel.findOne({name: city, state: state});
+      const events = await eventModel.find({city: cityId._id});
+      if(events.length === 0){
+        return res.status(404).send("NO events is available in the city")
+      }else{
+        return res.send(events)
+      }
+    }
+    catch(err){
+      res.status(400).send({ErrorMessage:err.message});
+    }
+  },
+
+  async searchSports(req, res){
+    try{
+      const sport = req.query.sport;
+      const avilableSport = sportModel.find({sportName: sport})
+      return res.send(avilableSport);
+    }
+    catch(err){
+       res.status(400).send({ErrorMessage:err.message});
+    }
+  },
+
+  async searchCitySports(req, res){
+    try{
+      const city = req.query.city;
+      const state = req.query.state;
+      const cityId = cityModel.findOne({name: city, state: state});
+      const sports = await sportModel.find({city: cityId._id});
+      if(sports.length === 0){
+        return res.status(404).send("No sports avilable in the city")
+      }else{
+        return res.send(sports)
+      }
+    }
+    catch(err){
+       res.status(400).send({ErrorMessage:err.message});
     }
   }
 }
