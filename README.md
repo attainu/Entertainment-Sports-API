@@ -295,6 +295,7 @@ Project done by Abhijeet and Souvik
       7. Review and ratings system for general users
       8. general users account creation
       9. Theater seat booking system
+      10. Addition of crew, cast, artist, players details further
 
 # Acknowledgement:
 
